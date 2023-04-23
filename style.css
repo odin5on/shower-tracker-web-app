@@ -1,0 +1,21 @@
+* {
+  border: 1px solid black;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 20px 0px;
+}
+
+.body-items {
+  padding: 10px;
+  margin: 20px;
+}
