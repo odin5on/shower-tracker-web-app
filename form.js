@@ -37,7 +37,7 @@ function signIn() {
   var email = document.getElementById("email");
   var password = document.getElementById("password");
   const promise = auth.signInWithEmailAndPassword(
-    email.value, password.value);
+    email.value.toString(), password.value.toString());
   promise.catch((e) => alert(e.message));
 }
 
@@ -101,7 +101,7 @@ function processShowerData(showersData, gpm) {
     const sh = document.createElement("p");
     minutes = (Math.round((shower.end - shower.start) / 600) / 100);
     totalMinutes += minutes;
-    sh.innerHTML = shower.start.toLocaleString('en-US') + " - " + shower.end.toLocaleString() + " Minutes: " + minutes;
+    sh.innerHTML = shower.start.toLocaleString('en-US') + " - " + shower.end.toLocaleTimeString() + " Minutes: " + minutes;
     sh.classList.add("shower");
     document.getElementById('showers').appendChild(sh);
   });
