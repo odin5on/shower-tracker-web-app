@@ -12,6 +12,7 @@ var firebaseConfig = {
   measurementId: "G-KMD7EQTCC2",
 };
 
+
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
@@ -101,6 +102,7 @@ function processShowerData(showersData, gpm) {
     shower.start = new Date(userData.showers[key].start);
     shower.end = new Date(userData.showers[key].end);
     shower.temperature = userData.showers[key].temperature;
+    shower.humidity = userData.showers[key].humidity;
     showers.push(shower);
   });
   console.log(showers);
@@ -121,7 +123,7 @@ function processShowerData(showersData, gpm) {
       totalMinutes += minutes;
       showersThisMonth++;
     }
-    sh.innerHTML = "<span>" + shower.start.toLocaleDateString('en-US') + "</span> - " + " Minutes: " + minutes + " Temp: " + shower.temperature;
+    sh.innerHTML = "<span>" + shower.start.toLocaleDateString('en-US') + ":</span>  &emsp;" + shower.start.toLocaleTimeString() + " - " + shower.end.toLocaleTimeString() + " &emsp;Minutes: " + minutes + " &emsp;Temp: " + shower.temperature + " &emsp;Humidity: " + shower.humidity + "%";
     sh.classList.add("shower");
     document.getElementById('showers').appendChild(sh);
   });
@@ -131,13 +133,20 @@ function processShowerData(showersData, gpm) {
   totalGallons.innerHTML = 'Gallons: <br><li><span>' + Math.round(totalMinutes * gpm * 100) / 100 + '</span></li>';
   const totalShowers = document.createElement('p');
   totalShowers.innerHTML = 'Showers: <br><li><span>' + showersThisMonth + '</span></li>';
+  const estimatedCost = document.createElement('p');
+  estimatedCost.innerHTML = 'Estimated Cost: <br><li><span>$' + Math.round(totalMinutes * gpm * .005 * 100)/100 + '</span></li>';
   document.getElementById('total-minutes').appendChild(totalMin);
   document.getElementById('total-gallons').appendChild(totalGallons);
   document.getElementById('total-showers').appendChild(totalShowers);
+  document.getElementById('estimated-cost').appendChild(estimatedCost);
 
   document.getElementById('month-label').innerHTML = monthNames[today.getMonth()] + " Totals:";
 }
 
-window.onload = function () {
-  loadUserData(auth.X);
-};
+function editGPM(){
+  var prompt = "Your current gallons per minute is set to "+userData.gpm+". \nA standard GPM is 2.5, but it could be as low as 1.5."
+  var newgpm = window.prompt(prompt, userData.gpm);
+  console.log(auth.X);
+  firebase.database().ref().child('users').child(auth.X).update({gpm: newgpm});
+  location.reload();
+}

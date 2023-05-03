@@ -20,21 +20,19 @@
 
   <title>Dashboard</title>
   <link href='https://fonts.googleapis.com/css?family=Segoe+UI&display=swap' rel='stylesheet'>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-  </style>
 </head>
 
 <body>
   <div class="content">
     <div class="header">
-      <h3 id="welcome"></h3>
+      <h1 id="welcome"></h1>
       <button onclick="signOut()" class="button">Sign out</button>
     </div>
     <div class="body">
-      <h3 id="month-label"></h3>
+      <div class="menu">
+        <h2 id="month-label"></h2>
+        <button onclick="editGPM()">Edit GPM</button>
+      </div>
       <div class="summary">
         <div class="body-items" id="total-showers">
 
@@ -43,6 +41,9 @@
 
         </div>
         <div class="body-items" id="total-gallons">
+
+        </div>
+        <div class="body-items" id="estimated-cost">
 
         </div>
       </div>
