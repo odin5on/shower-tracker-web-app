@@ -15,7 +15,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 
   <script src="form.js"></script>
-  
+
   <link rel="stylesheet" href="style.css">
 
   <title>Dashboard</title>
@@ -31,17 +31,26 @@
   <div class="content">
     <div class="header">
       <h3 id="welcome"></h3>
-      <button onclick="signOut()">Sign out</button>
+      <button onclick="signOut()" class="button">Sign out</button>
     </div>
     <div class="body">
-      <div class="body-items showers" id="showers">
-        
-      </div>
-      <div class="body-items total-usage" id="totals">
+      <h3 id="month-label"></h3>
+      <div class="summary">
+        <div class="body-items" id="total-showers">
 
+        </div>
+        <div class="body-items" id="total-minutes">
+
+        </div>
+        <div class="body-items" id="total-gallons">
+
+        </div>
       </div>
-      <button onclick="loadUserData(auth.X)">get name</button>
-      
+      <div class="body-items showers">
+        <ul id="showers">
+
+        </ul>
+      </div>
     </div>
   </div>
 </body>

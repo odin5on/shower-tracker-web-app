@@ -12,6 +12,10 @@ var firebaseConfig = {
   measurementId: "G-KMD7EQTCC2",
 };
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 var userData;
 
 // Initialize Firebase
@@ -44,7 +48,7 @@ function signIn() {
 // SignOut
 function signOut() {
   auth.signOut();
-  alert("SignOut Successfully from System");
+  //alert("SignOut Successfully from System");
   window.location.href = "./login.html";
 }
 
@@ -52,10 +56,11 @@ function signOut() {
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     var email = user.email;
-    alert("Active user " + email);
+    //alert("Active user " + email);
     routetoHome();
+    loadUserData(auth.X);
   } else {
-    alert("No Active user Found");
+    //alert("No Active user Found");
   }
 });
 
@@ -89,23 +94,50 @@ function loadUserData(uid) {
 }
 
 function processShowerData(showersData, gpm) {
+  showersData.sort
   var showers = []
   Object.keys(showersData).forEach(key => {
     var shower = { start: '', end: '' };
     shower.start = new Date(userData.showers[key].start);
     shower.end = new Date(userData.showers[key].end);
+    shower.temperature = userData.showers[key].temperature;
     showers.push(shower);
   });
+  console.log(showers);
+  showers.sort((a, b) => {
+    return b.start - a.start;
+  });
+  console.log(showers);
+  today = new Date();
+  console.log(today.getMonth());
+  console.log(showers[1].start.getMonth());
   var totalMinutes = 0;
+  var showersThisMonth = 0;
   showers.forEach(shower => {
-    const sh = document.createElement("p");
+    const sh = document.createElement("li");
     minutes = (Math.round((shower.end - shower.start) / 600) / 100);
-    totalMinutes += minutes;
-    sh.innerHTML = shower.start.toLocaleString('en-US') + " - " + shower.end.toLocaleTimeString() + " Minutes: " + minutes;
+    nowMonth = today.getMonth();
+    if(nowMonth == shower.start.getMonth()){
+      totalMinutes += minutes;
+      showersThisMonth++;
+    }
+    sh.innerHTML = "<span>" + shower.start.toLocaleDateString('en-US') + "</span> - " + " Minutes: " + minutes + " Temp: " + shower.temperature;
     sh.classList.add("shower");
     document.getElementById('showers').appendChild(sh);
   });
   const totalMin = document.createElement('p');
-  totalMin.innerHTML = 'Total minutes: ' + Math.round(totalMinutes * 100) / 100 + '<br>Total gallons: ' + Math.round(totalMinutes * gpm * 100) / 100;
-  document.getElementById('totals').appendChild(totalMin);
+  totalMin.innerHTML = 'Minutes: <br><li><span>' + Math.round(totalMinutes * 100) / 100 + '</span></li>';
+  const totalGallons = document.createElement('p');
+  totalGallons.innerHTML = 'Gallons: <br><li><span>' + Math.round(totalMinutes * gpm * 100) / 100 + '</span></li>';
+  const totalShowers = document.createElement('p');
+  totalShowers.innerHTML = 'Showers: <br><li><span>' + showersThisMonth + '</span></li>';
+  document.getElementById('total-minutes').appendChild(totalMin);
+  document.getElementById('total-gallons').appendChild(totalGallons);
+  document.getElementById('total-showers').appendChild(totalShowers);
+
+  document.getElementById('month-label').innerHTML = monthNames[today.getMonth()] + " Totals:";
 }
+
+window.onload = function () {
+  loadUserData(auth.X);
+};
